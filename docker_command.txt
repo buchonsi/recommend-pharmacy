@@ -1,0 +1,49 @@
+도커 관련
+
+---------------------[Dockerfile 작성 문법]---------------------
+    FROM : 새로운 이미지를 생성할 때 기반으로 사용할 이미지를 설정(이미지 이름:태그)
+        ex) FROM openjdk:11
+
+    ARG : 이미지 빌드 시점에서 사용할 변수 지정
+        ex) ARG JAR_FILE=build/libs/app.jar
+
+    COPY : 호스트에 있는 파일이나 디렉토리를 Docker 이미지의 파일 시스템으로 복사
+        ex) COPY ${JAR_FILE} ./app.jar
+
+    ENV : 컨테이너에서 사용할 환경 변수 지정 (TZ : TimeZone 환경 변수)
+        ex) ENV TZ=Asia/Seoul
+
+    ENTRYPOINT : 컨테이너가 실행되었을 때 항상 실행되어야 하는 커멘드 지정
+        ex) ENTRYPOINT ["java", "-jar", "./app.jar"]
+
+---------------------[Docker 명령어]----------------------------
+#Dockerfile로 이미지 만들기
+docker build -t [도커허브아이디]/[도커이미지이름] [Dockerfile 경로]
+    ex)docker build -t buchonsi/recophar-application-test .
+
+#컨테이너 생성 및 시작
+docker run --name [컨테이너 이름] -p [호스트와 컨테이너 port 포워딩]
+docker run --name recophar-app -p 8080:8080 .
+
+#컨테이너 리스트를 반환
+docker ps
+
+#컨테이너 접근(-it 외부에서 명령어를 컨테이너로 전달하는 옵션)
+docker exec -it [컨테이너 이름 또는 id] bash
+
+---------------------[Docker-compose 작성]---------------------
+version : 도커 컴포즈 버전
+service : 이곳에 실행하려는 컨테이너들 정의
+  recophar-app : 서비스 명(네트워크 호스트명) / 같은 네트워크에 속한 컨테이너끼리 서비스 명으로 접근 가능
+    container_name : 컨테이너 이름
+    build : Dockerfile이 있는 위치
+    depends_on : 특정 컨테이너에 대한 의존관계
+    image : 컨테이너 생성할 때, 사용할 도커 이미지 지정
+    environment : 환경 변수
+    volumes : 호스트 디렉토리: 컨테이너 디렉토리
+    ports : 접근 포트 설정(컨테이너 외부:컨테이너 내부) / docker run -p 옵션과 같으며 개방할 포트 지정
+    restart : 컨테이너 실행 실패하는 경우 재시작 여부
+
+---------------------[Docker-compose 명령어]---------------------
+docker-compose -f [docker-compose 설정파일] up
+docker-compose -f docker-compose-local.yml up
