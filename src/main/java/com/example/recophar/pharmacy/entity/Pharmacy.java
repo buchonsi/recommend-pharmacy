@@ -1,5 +1,6 @@
 package com.example.recophar.pharmacy.entity;
 
+import com.example.recophar.BaseTimeEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -15,7 +16,7 @@ import javax.persistence.Id;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Pharmacy {
+public class Pharmacy extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)     //키값 생성을 db에게 위임
@@ -25,4 +26,8 @@ public class Pharmacy {
     private String pharmacyAddress;
     private double latitude;
     private double longitude;
+
+    public void changePharmacyAddress(String address) {
+        this.pharmacyAddress = address;
+    }
 }
