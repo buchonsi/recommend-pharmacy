@@ -45,6 +45,10 @@ dependencies {
     //test Container (redis는 docker 이미지를 받아와서 사용)
     testImplementation "org.testcontainers:spock:1.17.1"
     testImplementation "org.testcontainers:mariadb:1.17.1"
+
+    //csv 변환
+    implementation 'com.opencsv:opencsv:5.7.1'
+
 }
 
 tasks.named('test') {
