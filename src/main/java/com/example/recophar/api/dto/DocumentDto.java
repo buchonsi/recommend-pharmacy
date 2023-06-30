@@ -2,6 +2,7 @@ package com.example.recophar.api.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -18,6 +19,7 @@ import lombok.NoArgsConstructor;
 //road_address(RoadAddress) : 도로명 주소 상세 정보
 
 @Getter
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class DocumentDto {
