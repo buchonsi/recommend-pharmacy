@@ -2,11 +2,14 @@ package com.example.recophar.direction.service;
 
 import com.example.recophar.api.dto.DocumentDto;
 import com.example.recophar.direction.entity.Direction;
+import com.example.recophar.direction.repository.DirectionRepository;
 import com.example.recophar.pharmacy.dto.PharmacyDto;
 import com.example.recophar.pharmacy.service.PharmacySearchService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -19,12 +22,19 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class DirectionService {
 
-    //약국 최대 검색 갯수 : 3
-    private static final int MAX_SEARCH_COUNT = 3;
-    // 변경 10km
-    private static final double RADIUS_KM = 10.0;
+    private static final int MAX_SEARCH_COUNT = 3;  //약국 최대 검색 갯수 : 3
+    private static final double RADIUS_KM = 10.0;   // 변경 10km
 
     private final PharmacySearchService pharmacySearchService;
+    private final DirectionRepository directionRepository;
+
+    @Transactional
+    public List<Direction> saveAll(List<Direction> directionList) {
+        if (CollectionUtils.isEmpty(directionList)) {
+            return Collections.emptyList();
+        }
+        return directionRepository.saveAll(directionList);
+    }
 
     public List<Direction> buildDirectionList(DocumentDto documentDto) {
 
