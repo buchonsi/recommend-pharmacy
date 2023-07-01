@@ -49,6 +49,12 @@ dependencies {
     //csv 변환
     implementation 'com.opencsv:opencsv:5.7.1'
 
+    //Spring retry
+    implementation 'org.springframework.retry:spring-retry:'
+
+    //mockWebServer
+    implementation 'com.squareup.okhttp3:okhttp:4.10.0'
+    implementation 'com.squareup.okhttp3:mockwebserver:4.10.0'
 }
 
 tasks.named('test') {
