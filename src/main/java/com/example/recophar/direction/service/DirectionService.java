@@ -1,6 +1,7 @@
 package com.example.recophar.direction.service;
 
 import com.example.recophar.api.dto.DocumentDto;
+import com.example.recophar.api.service.KakaoCategorySearchService;
 import com.example.recophar.direction.entity.Direction;
 import com.example.recophar.direction.repository.DirectionRepository;
 import com.example.recophar.pharmacy.dto.PharmacyDto;
@@ -27,6 +28,7 @@ public class DirectionService {
 
     private final PharmacySearchService pharmacySearchService;
     private final DirectionRepository directionRepository;
+    private final KakaoCategorySearchService kakaoCategorySearchService;
 
     @Transactional
     public List<Direction> saveAll(List<Direction> directionList) {
@@ -34,6 +36,30 @@ public class DirectionService {
             return Collections.emptyList();
         }
         return directionRepository.saveAll(directionList);
+    }
+
+    public List<Direction> buildDirectionListByCategoryApi(DocumentDto inputDocumentDto) {
+
+        if (Objects.isNull(inputDocumentDto)) {
+            return Collections.emptyList();
+        }
+
+        return kakaoCategorySearchService
+                .requestPharmacyCategorySearch(inputDocumentDto.getLatitude(), inputDocumentDto.getLongitude(), RADIUS_KM)
+                .getDocumentDtoList()
+                .stream().map(resultDocument ->
+                        Direction.builder()
+                                .inputAddress(inputDocumentDto.getAddressName())
+                                .inputLatitude(inputDocumentDto.getLatitude())
+                                .inputLongitude(inputDocumentDto.getLongitude())
+                                .targetAddress(resultDocument.getAddressName())
+                                .targetPharmacyName(resultDocument.getPlaceName())
+                                .targetLatitude(resultDocument.getLatitude())
+                                .targetLongitude(resultDocument.getLongitude())
+                                .distance(resultDocument.getDistance() * 0.001)     //km단위
+                                .build())
+                .limit(MAX_SEARCH_COUNT)
+                .collect(Collectors.toList());
     }
 
     public List<Direction> buildDirectionList(DocumentDto documentDto) {

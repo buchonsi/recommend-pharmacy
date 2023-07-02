@@ -1,11 +1,9 @@
 package com.example.recophar.api.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
+//요구사항
 //address_name(String) : 전체 지번 주소 또는 전체 도로명 주소, 입력에 따라 결정됨
 //address_type(String) : address_name의 값의 타입(Type)
 //                        다음 중 하나:
@@ -22,7 +20,11 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
 public class DocumentDto {
+
+    @JsonProperty("place_name")
+    private String placeName;
 
     @JsonProperty("address_name")
     private String addressName;
@@ -32,4 +34,7 @@ public class DocumentDto {
 
     @JsonProperty("x")
     private double longitude;
+
+    @JsonProperty("distance")
+    private double distance;
 }

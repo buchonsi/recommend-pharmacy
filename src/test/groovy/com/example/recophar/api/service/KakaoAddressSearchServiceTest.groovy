@@ -43,6 +43,8 @@ class KakaoAddressSearchServiceTest extends AbstractIntegrationContainerBaseTest
         if(searchResult == null) actualResult = false
         else actualResult = searchResult.getDocumentDtoList().size() > 0
 
+        actualResult == expectedResult
+
         where:
         inputAddress                              | expectedResult
         "서울 특별시 성북구 종암동"               | true
