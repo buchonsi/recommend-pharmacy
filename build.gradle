@@ -1,8 +1,8 @@
 plugins {
-    id 'groovy'
-    id 'java'
     id 'org.springframework.boot' version '2.6.7'
-    id 'io.spring.dependency-management' version '1.0.15.RELEASE'
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id 'java'
+    id 'groovy'
 }
 
 group = 'com.example'
@@ -39,12 +39,12 @@ dependencies {
     testImplementation('org.spockframework:spock-core:2.1-groovy-3.0')
     testImplementation('org.spockframework:spock-spring:2.1-groovy-3.0')
 
-    //런타임에 클래스 기만 mock을 만들기 위해 필요
+    //런타임에 클래스 기반 mock을 만들기 위해 필요
     testImplementation('net.bytebuddy:byte-buddy:1.12.10')
 
     //test Container (redis는 docker 이미지를 받아와서 사용)
-    testImplementation "org.testcontainers:spock:1.17.1"
-    testImplementation "org.testcontainers:mariadb:1.17.1"
+    testImplementation 'org.testcontainers:spock:1.17.1'
+    testImplementation 'org.testcontainers:mariadb:1.17.1'
 
     //csv 변환
     implementation 'com.opencsv:opencsv:5.7.1'
@@ -53,8 +53,8 @@ dependencies {
     implementation 'org.springframework.retry:spring-retry:'
 
     //mockWebServer
-    implementation 'com.squareup.okhttp3:okhttp:4.10.0'
-    implementation 'com.squareup.okhttp3:mockwebserver:4.10.0'
+    testImplementation('com.squareup.okhttp3:okhttp:4.10.0')
+    testImplementation('com.squareup.okhttp3:mockwebserver:4.10.0')
 
     //handlebars
     implementation 'pl.allegro.tech.boot:handlebars-spring-boot-starter:0.3.4'
@@ -65,4 +65,14 @@ dependencies {
 
 tasks.named('test') {
     useJUnitPlatform()
+}
+
+// $ ./gradlew clean build -PKAKAO_REST_API_KEY={api key 값}
+// 명령어로 전체 테스트 및 빌드하여 jar 파일 생성
+processTestResources {
+    boolean hasProperty = project.hasProperty("KAKAO_REST_API_KEY")
+    System.out.println("Set kakao rest api key: $hasProperty")
+    filesMatching("**/application.yml"){
+        expand(project.properties)
+    }
 }
