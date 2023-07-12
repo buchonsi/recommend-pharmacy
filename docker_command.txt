@@ -47,3 +47,15 @@ service : 이곳에 실행하려는 컨테이너들 정의
 ---------------------[Docker-compose 명령어]---------------------
 docker-compose -f [docker-compose 설정파일] up
 docker-compose -f docker-compose-local.yml up
+
+---------------------[Docker-compose 오류시 재빌드 및 캐시 초기화]---------------------
+변경사항이 있다면 반영이 안될 수 있기 때문에 build 옵션을 추가하여 기존에 이미지와 상관없이
+항상 빌드 하도록 추가
+docker-compose -f docker-compose-local.yml up --build
+
+
+컨테이너 간의 conflict가 발생할 수 있음. 그 때 사용하는 리소스를 정리 명령어.
+*멈춰있는 컨테이너 제거
+*컨테이너에서 사용되지 않는 네트워크 제거
+*불필요한 이미지 및 빌드 캐시 제거
+docker system prune
